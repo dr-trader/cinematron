@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Cinematron</string>
+    <string name="search_button_title">Search</string>
+
+<!--
+    <string name="hardcoded_movie_title">Discovering Kotlin (2021)</string>
+    <string name="hardcoded_movie_descr">It\'s a long story about hard studying and mad coding.</string>
+-->
 </resources>
