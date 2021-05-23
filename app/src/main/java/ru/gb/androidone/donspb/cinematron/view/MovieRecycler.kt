@@ -9,35 +9,40 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.model.Movie
 
-class MovieRecycler(private val movieData: List<Movie>) : RecyclerView.Adapter<MovieRecycler.ViewHolder>() {
+class MovieRecycler(private var onItemViewClickListener: MainFragment.OnItemViewClickListener?) : RecyclerView.Adapter<MovieRecycler.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var imageView: ImageView? = null
-        var titleView: TextView? = null
-        var yearView: TextView? = null
+    private var movieData: List<Movie> = listOf()
 
-        init {
-            imageView = itemView.findViewById(R.id.rv_item_image)
-            titleView = itemView.findViewById(R.id.rv_item_title)
-            yearView = itemView.findViewById(R.id.rv_item_year)
-        }
+    fun setMovie(data: List<Movie>) {
+        movieData = data
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_item, parent, false)
-        return ViewHolder(itemView)
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(
+            R.layout.recycler_item, parent, false) as View
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.imageView?.setImageResource(R.drawable.demo_poster)
-        holder.titleView?.text = movieData[position].movieTitle
-        holder.yearView?.text = "(" + movieData[position].movieYear.toString() + ")"
-
+        holder.bind(movieData[position])
     }
 
     override fun getItemCount() = movieData.size
 
+    fun removeListener() {
+        onItemViewClickListener = null
+    }
 
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        fun bind(movie: Movie) {
+            itemView.findViewById<ImageView>(R.id.rv_item_image).setImageResource(R.drawable.demo_poster)
+            itemView.findViewById<TextView>(R.id.rv_item_title).text =  movie.movieTitle
+            itemView.findViewById<TextView>(R.id.rv_item_year).text = "(${movie.movieYear})"
+
+            itemView.setOnClickListener { onItemViewClickListener?.onItemViewClick(movie) }
+        }
+    }
 }
 

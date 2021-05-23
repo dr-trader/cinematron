@@ -5,7 +5,7 @@ class RepositoryImpl : Repository {
         return Movie()
     }
 
-    override fun getMovieFromLocalStorage(): Movie {
-        return Movie()
+    override fun getMoviesLocalList(): List<Movie> {
+        return getMoviesList()
     }
 }
