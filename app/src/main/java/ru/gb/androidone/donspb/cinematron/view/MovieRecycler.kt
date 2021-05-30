@@ -37,11 +37,13 @@ class MovieRecycler(private var onItemViewClickListener: MainFragment.OnItemView
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(movie: Movie) {
-            itemView.findViewById<ImageView>(R.id.rv_item_image).setImageResource(R.drawable.demo_poster)
-            itemView.findViewById<TextView>(R.id.rv_item_title).text =  movie.movieTitle
-            itemView.findViewById<TextView>(R.id.rv_item_year).text = "(${movie.movieYear})"
+            itemView.apply {
+                findViewById<ImageView>(R.id.rv_item_image).setImageResource(R.drawable.demo_poster)
+                findViewById<TextView>(R.id.rv_item_title).text = movie.movieTitle
+                findViewById<TextView>(R.id.rv_item_year).text = "(${movie.movieYear})"
 
-            itemView.setOnClickListener { onItemViewClickListener?.onItemViewClick(movie) }
+                setOnClickListener { onItemViewClickListener?.onItemViewClick(movie) }
+            }
         }
     }
 }

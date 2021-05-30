@@ -8,10 +8,10 @@ data class Movie(
     val movieTitle: String = "Discovering Kotlin",
     val movieYear: Int = 2021,
     val movieDescr: String = "It\'s a long story about hard studying and some coding.",
+    val id: Int = 330
 ) : Parcelable
 
-fun getMoviesList() : List<Movie> {
-    return listOf(
+fun getMoviesList() = listOf(
         Movie(),
         Movie(),
         Movie(),
@@ -23,4 +23,3 @@ fun getMoviesList() : List<Movie> {
         Movie(),
         Movie(),
     )
-}

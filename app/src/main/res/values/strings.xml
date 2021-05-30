@@ -13,4 +13,6 @@
     <string name="hardcoded_movie_title">Discovering Kotlin (2021)</string>
     <string name="hardcoded_movie_descr">It\'s a long story about hard studying and mad coding.</string>
 -->
+    <string name="error">Error! Can\'t load data.</string>
+    <string name="reload">Try Again</string>
 </resources>
