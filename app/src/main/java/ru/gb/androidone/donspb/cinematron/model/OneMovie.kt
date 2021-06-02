@@ -9,7 +9,7 @@ val release_date: String,
 val vote_average: Float
 )
 
-data class Genre (
+data class Genre(
     val id: Int,
-    val name: String
+    val name: String?
 )
