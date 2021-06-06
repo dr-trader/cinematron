@@ -2,12 +2,13 @@ package ru.gb.androidone.donspb.cinematron.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.gb.androidone.donspb.cinematron.model.RepositoryImpl
+import ru.gb.androidone.donspb.cinematron.repository.MainRepoImpl
 import java.lang.Thread.sleep
 
 class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
-    private val repositoryImpl: RepositoryImpl = RepositoryImpl()) :
+    private val repositoryImpl: MainRepoImpl = MainRepoImpl()
+) :
     ViewModel() {
 
     fun getLiveData() = liveDataToObserve
