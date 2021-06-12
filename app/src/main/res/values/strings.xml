@@ -6,13 +6,19 @@
     <string name="recycler_new_header">NEWEST</string>
     <string name="recycler_top_header">TOP RATED</string>
 
+    <string name="server_error">Server Error</string>
+    <string name="request_error">Server Request Error</string>
+    <string name="corrupted_data_error">Corrupted Data</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!--
-    <string name="hardcoded_movie_title">Discovering Kotlin (2021)</string>
-    <string name="hardcoded_movie_descr">It\'s a long story about hard studying and mad coding.</string>
--->
     <string name="error">Error! Can\'t load data.</string>
     <string name="reload">Try Again</string>
+
+
+    <!-- List Names -->
+    <string name="now_playing_list">Now Playing</string>
+    <string name="popular_list">Popular</string>
+    <string name="top_rated_list">Top Rated</string>
+    <string name="upcoming_list">Upcoming</string>
 </resources>

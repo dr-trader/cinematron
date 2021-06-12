@@ -7,15 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import coil.api.load
 import ru.gb.androidone.donspb.cinematron.Consts
-import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.databinding.MovieFragmentBinding
 import ru.gb.androidone.donspb.cinematron.model.*
 import ru.gb.androidone.donspb.cinematron.viewmodel.AppState
 import ru.gb.androidone.donspb.cinematron.viewmodel.MovieModelView
 import java.time.LocalDate
-
-private const val MAIN_LINK="https://api.themoviedb.org/3/movie/"
 
 class MovieFragment : Fragment() {
 
@@ -79,7 +77,7 @@ class MovieFragment : Fragment() {
              }
              movieTitle.text = "${oneMovie.title} (${date.year})"
              movieGenres.text = genresString
-             moviePoster.setImageResource(R.drawable.demo_poster)
+             moviePoster.load("https://image.tmdb.org/t/p/original/${oneMovie.poster_path}")
              movieRating.text = oneMovie.vote_average.toString()
              movieDecr.text = oneMovie.overview
         }

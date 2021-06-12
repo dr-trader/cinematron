@@ -13,6 +13,7 @@
     <dimen name="title_size">30sp</dimen>
     <dimen name="genres_size">15sp</dimen>
     <dimen name="poster_height">300sp</dimen>
+    <dimen name="poster_width">200sp</dimen>
     <dimen name="comp_spacing">10dp</dimen>
     <dimen name="descr_size">15sp</dimen>
     <dimen name="rating_spacing_bot">20sp</dimen>

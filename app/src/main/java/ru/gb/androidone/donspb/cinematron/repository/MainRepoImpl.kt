@@ -1,10 +1,17 @@
 package ru.gb.androidone.donspb.cinematron.repository
 
-import ru.gb.androidone.donspb.cinematron.model.Movie
-import ru.gb.androidone.donspb.cinematron.model.getMoviesList
+import retrofit2.Callback
+import ru.gb.androidone.donspb.cinematron.model.MovieList
 
-class MainRepoImpl : MainRepo {
-    override fun getMovieFromServer() = Movie()
+class MainRepoImpl(private val remoteDataSource: RemoteDataSource) : MainRepo {
 
-    override fun getMoviesLocalList() = getMoviesList()
+    override fun getMovieListFromServer(listType: String, callback: Callback<MovieList>) {
+        remoteDataSource.getMovieList(listType, callback)
+    }
+
+//    override fun getMovieFromServer() = Movie()
+//
+//    override fun getMoviesLocalList() = getMoviesList()
+
+
 }

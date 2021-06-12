@@ -4,12 +4,13 @@ data class OneMovie(
 val title: String,
 val genres: List<Genre>,
 val id: Int,
-val overview: String,
+val overview: String?,
 val release_date: String,
-val vote_average: Float
+val vote_average: Float,
+val poster_path: String?
 )
 
 data class Genre(
     val id: Int,
-    val name: String?
+    val name: String
 )
