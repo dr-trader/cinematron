@@ -33,7 +33,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/recycler_last_header"
+                android:text="@string/recent_list"
                 android:layout_margin="@dimen/main_parts_spacing"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/recycler_new_header"
+                android:text="@string/now_playing_list"
                 android:layout_margin="@dimen/main_parts_spacing"
                 android:layout_marginTop="@dimen/main_parts_spacing"/>
 
@@ -62,7 +62,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/recycler_top_header"
+                android:text="@string/top_rated_list"
                 android:layout_margin="@dimen/main_parts_spacing"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -76,7 +76,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/recycler_top_header"
+                android:text="@string/popular_list"
                 android:layout_margin="@dimen/main_parts_spacing"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -90,7 +90,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/recycler_top_header"
+                android:text="@string/upcoming_list"
                 android:layout_margin="@dimen/main_parts_spacing"/>
 
             <androidx.recyclerview.widget.RecyclerView

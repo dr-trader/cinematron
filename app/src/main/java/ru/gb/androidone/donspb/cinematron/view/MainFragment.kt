@@ -13,6 +13,7 @@ import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.databinding.MainFragmentBinding
 import ru.gb.androidone.donspb.cinematron.model.MovieListItem
 import ru.gb.androidone.donspb.cinematron.viewmodel.AppState
+import ru.gb.androidone.donspb.cinematron.viewmodel.LocalViewModel
 import ru.gb.androidone.donspb.cinematron.viewmodel.MainViewModel
 import ru.gb.androidone.donspb.cinematron.viewmodel.MovieListsEnum
 
@@ -26,6 +27,9 @@ class MainFragment : Fragment() {
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
+    private val viewModelRecent: LocalViewModel by lazy {
+        ViewModelProvider(this).get(LocalViewModel::class.java)
+    }
 
     private val adapterRecent = movieRecycler()
     private val adapterNow = movieRecycler()
@@ -35,13 +39,14 @@ class MainFragment : Fragment() {
 
     private fun movieRecycler() = MovieRecycler(object : OnItemViewClickListener {
         override fun onItemViewClick(movie: MovieListItem) {
+            viewModelRecent.saveMovieToDB(movie)
             val manager = activity?.supportFragmentManager?.apply {
                 beginTransaction()
-                .replace(R.id.main_container, MovieFragment.newInstance(Bundle().apply {
-                    putInt(Consts.BUNDLE_ID_NAME, movie.id)
-                }))
-                .addToBackStack("")
-                .commitAllowingStateLoss()
+                    .replace(R.id.main_container, MovieFragment.newInstance(Bundle().apply {
+                        putInt(Consts.BUNDLE_ID_NAME, movie.id)
+                    }))
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
             }
         }
     })
@@ -64,7 +69,10 @@ class MainFragment : Fragment() {
             movieRecyclerUp.adapter = adapterUp
         }
 
-        viewModel.movieListData.observe(viewLifecycleOwner, Observer { renderData(it, RECENT_LIST_ID) })
+
+        viewModelRecent.recentLiveData.observe(viewLifecycleOwner, Observer {
+            renderData(it, R.string.recent_list)
+        })
         viewModel.movieListDataNow.observe(viewLifecycleOwner, Observer {
             renderData(it, MovieListsEnum.NowPlayingList.listNameId) })
         viewModel.movieListDataPop.observe(viewLifecycleOwner, Observer {
@@ -73,6 +81,7 @@ class MainFragment : Fragment() {
             renderData(it, MovieListsEnum.TopRatedList.listNameId) })
         viewModel.movieListDataUp.observe(viewLifecycleOwner, Observer {
             renderData(it, MovieListsEnum.UpcomingList.listNameId) })
+        viewModelRecent.getRecentMovies()
         viewModel.getMovieListFromRemote(MovieListsEnum.NowPlayingList)
         viewModel.getMovieListFromRemote(MovieListsEnum.PopularList)
         viewModel.getMovieListFromRemote(MovieListsEnum.TopRatedList)
@@ -86,6 +95,9 @@ class MainFragment : Fragment() {
                 binding.rvLoadingLayout.visibility = View.GONE
                 binding.mainScrollview.visibility = View.VISIBLE
                 when (listname) {
+                    R.string.recent_list -> {
+                        adapterRecent.setMovie(appState.movieList.results)
+                    }
                     R.string.now_playing_list -> {
                         adapterNow.setMovie(appState.movieList.results)
                     }

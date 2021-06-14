@@ -6,21 +6,23 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.gb.androidone.donspb.cinematron.App
 import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.model.MovieList
+import ru.gb.androidone.donspb.cinematron.model.MovieListItem
+import ru.gb.androidone.donspb.cinematron.repository.LocalRepo
+import ru.gb.androidone.donspb.cinematron.repository.LocalRepoImpl
 import ru.gb.androidone.donspb.cinematron.repository.MainRepoImpl
 import ru.gb.androidone.donspb.cinematron.repository.RemoteDataSource
 
 class MainViewModel(
-    val movieListData: MutableLiveData<AppState> = MutableLiveData(),
     val movieListDataNow: MutableLiveData<AppState> = MutableLiveData(),
     val movieListDataPop: MutableLiveData<AppState> = MutableLiveData(),
     val movieListDataTop: MutableLiveData<AppState> = MutableLiveData(),
     val movieListDataUp: MutableLiveData<AppState> = MutableLiveData(),
     private val repositoryImpl: MainRepoImpl = MainRepoImpl(RemoteDataSource())
+//    private val recentRepository: LocalRepo = LocalRepoImpl(App.getRecentDao())
 ) : ViewModel() {
-
-//    private val listOfLists: MutableList<MovieList> = mutableListOf()
 
     fun getMovieListFromRemote(listType: MovieListsEnum) {
         when (listType.listNameId) {

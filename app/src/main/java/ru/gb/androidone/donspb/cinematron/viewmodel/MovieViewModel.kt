@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.gb.androidone.donspb.cinematron.App.Companion.getRecentDao
 import ru.gb.androidone.donspb.cinematron.R
+import ru.gb.androidone.donspb.cinematron.model.MovieListItem
 import ru.gb.androidone.donspb.cinematron.model.OneMovie
-import ru.gb.androidone.donspb.cinematron.repository.MovieRepo
-import ru.gb.androidone.donspb.cinematron.repository.MovieRepoImpl
-import ru.gb.androidone.donspb.cinematron.repository.RemoteDataSource
+import ru.gb.androidone.donspb.cinematron.repository.*
 
 class MovieModelView(
     val movieLiveData: MutableLiveData<AppState> = MutableLiveData(),
@@ -30,22 +30,11 @@ class MovieModelView(
             val serverResponse: OneMovie? =response.body()
             movieLiveData.postValue(
                 if (response.isSuccessful && serverResponse != null) {
-                    checkResponse(serverResponse)
+                    AppState.Success(serverResponse)
                 } else {
                     AppState.Error(Throwable(R.string.server_error.toString()))
                 }
             )
         }
-
-        private fun checkResponse(serverResponse: OneMovie): AppState {
-//            return if (serverResponse.title == null
-//                || serverResponse.release_date == null
-//                || serverResponse.id == null) {
-//                AppState.Error(Throwable(R.string.corrupted_data_error.toString()))
-//            } else {
-               return AppState.Success(serverResponse)
-//            }
-        }
-
     }
 }
