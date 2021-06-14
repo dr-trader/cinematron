@@ -7,8 +7,11 @@ import ru.gb.androidone.donspb.cinematron.room.RecentMovies
 interface RecentDao
 {
 
-    @Query("SELECT * FROM RecentMovies")
+    @Query("SELECT * FROM RecentMovies ORDER BY datetime DESC")
     fun getAll(): List<RecentMovies>
+
+    @Query("DELETE FROM RecentMovies WHERE id NOT IN (SELECT id FROM RecentMovies ORDER BY datetime DESC LIMIT :limit)")
+    fun delOverlimit(limit: Int)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(entity: RecentMovies)
