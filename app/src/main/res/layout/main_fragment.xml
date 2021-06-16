@@ -118,4 +118,14 @@
             android:layout_gravity="center" />
     </FrameLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mainFragmentLocationFAB"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/main_back"
+        android:src="@android:drawable/ic_dialog_map"
+        android:layout_gravity="bottom|right"
+        app:maxImageSize="@dimen/fab_location_icon_size" />
+
 </FrameLayout>
