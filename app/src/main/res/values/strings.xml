@@ -32,4 +32,6 @@
     <string name="dialog_message_last_loc_known">Last known location showed</string>
     <string name="dialog_address_title">Address</string>
     <string name="dialog_open_map">Open map</string>
+    <string name="default_address">Nevsky pr., 1</string>
+
 </resources>
