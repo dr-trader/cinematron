@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "916226953413",
+    "project_id": "cinematron",
+    "storage_bucket": "cinematron.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916226953413:android:0eca2957f675e421f0e0ac",
+        "android_client_info": {
+          "package_name": "ru.gb.androidone.donspb.cinematron"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916226953413-fhgv3voauf7m1rk4qa37ihk5dqarm04m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkdtlqEpDU60YsufxtaKSqhNXcp2Uzmks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916226953413-fhgv3voauf7m1rk4qa37ihk5dqarm04m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

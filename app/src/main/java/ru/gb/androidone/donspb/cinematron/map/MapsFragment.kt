@@ -53,7 +53,7 @@ class MapsFragment : Fragment() {
             when {
                 ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED -> {
-//                        getLocation()
+                        getLocation()
                 }
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) ->
                 {
@@ -133,45 +133,45 @@ class MapsFragment : Fragment() {
         }
     }
 
-//    private fun getLocation() {
-//        activity?.let { context ->
-//            if (ContextCompat.checkSelfPermission(
-//                    context, Manifest.permission.ACCESS_FINE_LOCATION
-//                ) == PackageManager.PERMISSION_GRANTED
-//            )
-//            {
-//                val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as
-//                        LocationManager
-//                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//                    val provider = locationManager.getProvider(LocationManager.GPS_PROVIDER)
-//                    provider?.let {
-//                        locationManager.requestLocationUpdates(
-//                            LocationManager.GPS_PROVIDER,
-//                            REFRESH_PERIOD,
-//                            MINIMAL_DISTANCE,
-//                            onLocationListener
-//                        )
-//                    }
-//                } else {
-//                    val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-//                    if (location == null) {
-//                        showDialog(
-//                            getString(R.string.dialog_title_gps_off),
-//                            getString(R.string.dialog_message_last_loc_unknown)
-//                        )
-//                    } else {
-//                        getAddressAsync(context, location)
-//                        showDialog(
-//                            getString(R.string.dialog_title_gps_off),
-//                            getString(R.string.dialog_message_last_loc_known)
-//                        )
-//                    }
-//                }
-//            } else {
-//                showRationaleDialog()
-//            }
-//        }
-//    }
+    private fun getLocation() {
+        activity?.let { context ->
+            if (ContextCompat.checkSelfPermission(
+                    context, Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+            {
+                val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as
+                        LocationManager
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    val provider = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+                    provider?.let {
+                        locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            REFRESH_PERIOD,
+                            MINIMAL_DISTANCE,
+                            onLocationListener
+                        )
+                    }
+                } else {
+                    val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    if (location == null) {
+                        showDialog(
+                            getString(R.string.dialog_title_gps_off),
+                            getString(R.string.dialog_message_last_loc_unknown)
+                        )
+                    } else {
+                        getAddressAsync(context, location)
+                        showDialog(
+                            getString(R.string.dialog_title_gps_off),
+                            getString(R.string.dialog_message_last_loc_known)
+                        )
+                    }
+                }
+            } else {
+                showRationaleDialog()
+            }
+        }
+    }
 
     private fun getAddressAsync(context: Context, location: Location) {
         val geoCoder = Geocoder(context)
