@@ -19,6 +19,7 @@ interface TmdbListApi {
     @GET("3/movie/{listName}")
     fun getMovieList(
         @Path("listName") listName: String,
-        @Query("api_key") token: String
+        @Query("api_key") token: String,
+        @Query("page") page: Int
     ) : Call<MovieList>
 }

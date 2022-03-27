@@ -28,19 +28,19 @@ class MainViewModel(
         when (listType.listNameId) {
             R.string.now_playing_list -> {
                 movieListDataNow.value = AppState.Loading
-                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId))
+                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId), pageNumber = 1)
             }
             R.string.popular_list -> {
                 movieListDataPop.value = AppState.Loading
-                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId))
+                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId), pageNumber = 1)
             }
             R.string.top_rated_list -> {
                 movieListDataTop.value = AppState.Loading
-                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId))
+                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId), pageNumber = 1)
             }
             R.string.upcoming_list -> {
                 movieListDataUp.value = AppState.Loading
-                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId))
+                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId), pageNumber = 1)
             }
         }
     }

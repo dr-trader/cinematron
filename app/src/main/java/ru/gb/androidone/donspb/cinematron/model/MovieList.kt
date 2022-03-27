@@ -1,7 +1,5 @@
 package ru.gb.androidone.donspb.cinematron.model
 
-import java.util.*
-
 data class MovieList(
     val results: List<MovieListItem>?
 )

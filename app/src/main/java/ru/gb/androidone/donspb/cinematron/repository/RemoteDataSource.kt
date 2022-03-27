@@ -11,7 +11,6 @@ import ru.gb.androidone.donspb.cinematron.model.OneMovie
 
 class RemoteDataSource {
 
-
     private val movieApi = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(
@@ -34,7 +33,7 @@ class RemoteDataSource {
         movieApi.getMovie(movieID, Consts.API_KEY).enqueue(callback)
     }
 
-    fun getMovieList(listType: String, callback: Callback<MovieList>) {
-        movieListApi.getMovieList(listType, Consts.API_KEY).enqueue(callback)
+    fun getMovieList(listType: String, callback: Callback<MovieList>, pageNumber: Int) {
+        movieListApi.getMovieList(listType, Consts.API_KEY, pageNumber).enqueue(callback)
     }
 }
