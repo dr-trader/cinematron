@@ -24,16 +24,16 @@ class LocalViewModel(
         handlerThread.start()
     }
 
-    fun getRecentMovies() {
-        recentLiveData.value = AppState.Loading
-        dbHandler.post {
-            recentLiveData.postValue(AppState.Starting(MovieList(recentRepo.getLocalList())))
-        }
-    }
-
-    fun saveMovieToDB(movieData: MovieListItem) {
-        dbHandler.post {
-            recentRepo.saveEntity(movieData)
-        }
-    }
+//    fun getRecentMovies() {
+//        recentLiveData.value = AppState.Loading
+//        dbHandler.post {
+//            recentLiveData.postValue(AppState.Starting(MovieList(recentRepo.getLocalList())))
+//        }
+//    }
+//
+//    fun saveMovieToDB(movieData: MovieListItem) {
+//        dbHandler.post {
+//            recentRepo.saveEntity(movieData)
+//        }
+//    }
 }

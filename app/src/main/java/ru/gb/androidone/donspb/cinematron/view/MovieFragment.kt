@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import coil.api.load
+import coil.load
+//import coil.api.load
 import ru.gb.androidone.donspb.cinematron.Consts
 import ru.gb.androidone.donspb.cinematron.databinding.MovieFragmentBinding
 import ru.gb.androidone.donspb.cinematron.model.*

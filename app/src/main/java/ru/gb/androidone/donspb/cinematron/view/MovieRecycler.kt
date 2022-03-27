@@ -6,18 +6,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.model.MovieListItem
 import java.time.LocalDate
 
 class MovieRecycler(private var onItemViewClickListener: MainFragment.OnItemViewClickListener?) : RecyclerView.Adapter<MovieRecycler.ViewHolder>() {
 
-    private var movieData: List<MovieListItem> = listOf()
+    private val movieData: MutableList<MovieListItem> = mutableListOf()
 
     fun setMovie(data: List<MovieListItem>?) {
         if (data != null) {
-            movieData = data
+            movieData.addAll(data)
             notifyDataSetChanged()
         }
     }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,13 +51,27 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        GridLayoutManager(
+        val layoutManager = GridLayoutManager(
             requireContext(),
             2,
             RecyclerView.VERTICAL,
             false
         )
-            .apply { binding.movieRecycler.layoutManager = this }
+
+        viewModel.movieListData.observe(viewLifecycleOwner) {
+            renderData(it, MovieListsEnum.TopRatedList.listNameId)
+        }
+
+        binding.movieRecycler.layoutManager = layoutManager
+        binding.movieRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val childCount = layoutManager.childCount
+                val visibleCount = layoutManager.findFirstVisibleItemPosition()
+                val totalCount = layoutManager.itemCount
+                if ((childCount + visibleCount) >= totalCount) viewModel.getMovieListFromRemote(MovieListsEnum.TopRatedList.pathPart)
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
         binding.movieRecycler.adapter = adapter
 
 //        viewModel.movieListDataNow.observe(viewLifecycleOwner, Observer {
@@ -65,11 +80,8 @@ class MainFragment : Fragment() {
 //        viewModel.movieListDataPop.observe(viewLifecycleOwner, Observer {
 //            renderData(it, MovieListsEnum.PopularList.listNameId)
 //        })
-        viewModel.movieListDataTop.observe(viewLifecycleOwner) {
-            renderData(it, MovieListsEnum.TopRatedList.listNameId)
-        }
 
-        viewModel.getMovieListFromRemote(MovieListsEnum.TopRatedList)
+        viewModel.getMovieListFromRemote(MovieListsEnum.TopRatedList.pathPart)
 
     }
 
