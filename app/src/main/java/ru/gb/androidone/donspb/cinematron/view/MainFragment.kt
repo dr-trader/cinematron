@@ -1,32 +1,22 @@
 package ru.gb.androidone.donspb.cinematron.view
 
-import android.Manifest
-import android.app.AlertDialog
-import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
+import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ru.gb.androidone.donspb.cinematron.Consts
 import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.databinding.MainFragmentBinding
-import ru.gb.androidone.donspb.cinematron.map.MapsFragment
 import ru.gb.androidone.donspb.cinematron.model.MovieListItem
 import ru.gb.androidone.donspb.cinematron.viewmodel.AppState
-import ru.gb.androidone.donspb.cinematron.viewmodel.LocalViewModel
 import ru.gb.androidone.donspb.cinematron.viewmodel.MainViewModel
 import ru.gb.androidone.donspb.cinematron.viewmodel.MovieListsEnum
-import java.io.IOException
 
 class MainFragment : Fragment() {
 
@@ -36,20 +26,11 @@ class MainFragment : Fragment() {
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
-    private val viewModelRecent: LocalViewModel by lazy {
-        ViewModelProvider(this).get(LocalViewModel::class.java)
-    }
 
-    private val adapterRecent = movieRecycler()
-    private val adapterNow = movieRecycler()
-    private val adapterTop = movieRecycler()
-    private val adapterPop = movieRecycler()
-    private val adapterUp = movieRecycler()
-
-    private fun movieRecycler() = MovieRecycler(object : OnItemViewClickListener {
+    private val adapter = MovieRecycler(object : OnItemViewClickListener {
         override fun onItemViewClick(movie: MovieListItem) {
-            viewModelRecent.saveMovieToDB(movie)
-            val manager = activity?.supportFragmentManager?.apply {
+//            viewModel.saveMovieToDB(movie)
+            activity?.supportFragmentManager?.apply {
                 beginTransaction()
                     .replace(R.id.main_container, MovieFragment.newInstance(Bundle().apply {
                         putInt(Consts.BUNDLE_ID_NAME, movie.id)
@@ -70,38 +51,37 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding) {
-            movieRecycler.adapter = adapterRecent
-            movieRecyclerNow.adapter = adapterNow
-            movieRecyclerTop.adapter = adapterTop
-            movieRecyclerPop.adapter = adapterPop
-            movieRecyclerUp.adapter = adapterUp
-            mainFragmentLocationFAB.setOnClickListener {
-                activity?.supportFragmentManager?.apply {
-                beginTransaction()
-                    .replace(R.id.main_container, MapsFragment.newInstance())
-                    .addToBackStack("")
-                    .commitAllowingStateLoss()
-                }
-            }
+        val layoutManager = GridLayoutManager(
+            requireContext(),
+            2,
+            RecyclerView.VERTICAL,
+            false
+        )
+
+        viewModel.movieListData.observe(viewLifecycleOwner) {
+            renderData(it, MovieListsEnum.TopRatedList.listNameId)
         }
 
-        viewModelRecent.recentLiveData.observe(viewLifecycleOwner, Observer {
-            renderData(it, R.string.recent_list)
+        binding.movieRecycler.layoutManager = layoutManager
+        binding.movieRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val childCount = layoutManager.childCount
+                val visibleCount = layoutManager.findFirstVisibleItemPosition()
+                val totalCount = layoutManager.itemCount
+                if ((childCount + visibleCount) >= totalCount) viewModel.getMovieListFromRemote(MovieListsEnum.TopRatedList.pathPart)
+                super.onScrolled(recyclerView, dx, dy)
+            }
         })
-        viewModel.movieListDataNow.observe(viewLifecycleOwner, Observer {
-            renderData(it, MovieListsEnum.NowPlayingList.listNameId) })
-        viewModel.movieListDataPop.observe(viewLifecycleOwner, Observer {
-            renderData(it, MovieListsEnum.PopularList.listNameId) })
-        viewModel.movieListDataTop.observe(viewLifecycleOwner, Observer {
-            renderData(it, MovieListsEnum.TopRatedList.listNameId) })
-        viewModel.movieListDataUp.observe(viewLifecycleOwner, Observer {
-            renderData(it, MovieListsEnum.UpcomingList.listNameId) })
-        viewModelRecent.getRecentMovies()
-        viewModel.getMovieListFromRemote(MovieListsEnum.NowPlayingList)
-        viewModel.getMovieListFromRemote(MovieListsEnum.PopularList)
-        viewModel.getMovieListFromRemote(MovieListsEnum.TopRatedList)
-        viewModel.getMovieListFromRemote(MovieListsEnum.UpcomingList)
+        binding.movieRecycler.adapter = adapter
+
+//        viewModel.movieListDataNow.observe(viewLifecycleOwner, Observer {
+//            renderData(it, MovieListsEnum.NowPlayingList.listNameId)
+//        })
+//        viewModel.movieListDataPop.observe(viewLifecycleOwner, Observer {
+//            renderData(it, MovieListsEnum.PopularList.listNameId)
+//        })
+
+        viewModel.getMovieListFromRemote(MovieListsEnum.TopRatedList.pathPart)
 
     }
 
@@ -109,41 +89,21 @@ class MainFragment : Fragment() {
         when (appState) {
             is AppState.Starting -> {
                 binding.rvLoadingLayout.visibility = View.GONE
-                binding.mainScrollview.visibility = View.VISIBLE
-                when (listname) {
-                    R.string.recent_list -> {
-                        adapterRecent.setMovie(appState.movieList.results)
-                    }
-                    R.string.now_playing_list -> {
-                        adapterNow.setMovie(appState.movieList.results)
-                    }
-                    R.string.popular_list -> {
-                        adapterPop.setMovie(appState.movieList.results)
-                    }
-                    R.string.top_rated_list -> {
-                        adapterTop.setMovie(appState.movieList.results)
-                    }
-                    R.string.upcoming_list -> {
-                        adapterUp.setMovie(appState.movieList.results)
-                    }
-                }
+                binding.mainLayout.visibility = View.VISIBLE
+                adapter.setMovie(appState.movieList.results)
             }
             is AppState.Loading -> {
-                binding.mainScrollview.visibility = View.GONE
+                binding.mainLayout.visibility = View.GONE
                 binding.rvLoadingLayout.visibility = View.VISIBLE
             }
             is AppState.Error -> {
-                binding.mainScrollview.showSnackBar(getString(R.string.error))
+                binding.mainLayout.showSnackBar(getString(R.string.error))
             }
         }
     }
 
     override fun onDestroyView() {
-        adapterNow.removeListener()
-        adapterRecent.removeListener()
-        adapterTop.removeListener()
-        adapterPop.removeListener()
-        adapterUp.removeListener()
+        adapter.removeListener()
         super.onDestroyView()
     }
 
@@ -154,22 +114,6 @@ class MainFragment : Fragment() {
     interface OnItemViewClickListener {
         fun onItemViewClick(movie: MovieListItem)
     }
-
-
-//    private fun showAddressDialog(address: String, location: Location) {
-//        activity?.let {
-//            AlertDialog.Builder(it)
-//                .setTitle(getString(R.string.dialog_address_title))
-//                .setMessage(address)
-//                .setNegativeButton(getString(R.string.dialog_button_close))
-//                { dialog, _ -> dialog.dismiss() }
-//                .setPositiveButton(getString(R.string.dialog_open_map))
-//                {
-//                }
-//                .create()
-//                .show()
-//        }
-//    }
 }
 
 private fun View.showSnackBar(
