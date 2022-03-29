@@ -50,7 +50,7 @@ class MovieRecycler(private var onItemViewClickListener: MainFragment.OnItemView
         fun bind(movie: MovieListItem) {
             itemView.apply {
                 findViewById<ImageView>(R.id.rv_item_image)
-                    .load("https://image.tmdb.org/t/p/original/${movie.poster_path}")
+                    .load(Consts.BASE_IMAGE_URL + movie.poster_path)
                 findViewById<TextView>(R.id.rv_item_title).text = movie.title
                 val formatter = DateTimeFormatter.ofPattern("dd LLL yyyy")
                 findViewById<TextView>(R.id.rv_item_year).text =

@@ -12,5 +12,6 @@ data class RecentMovies(
     val poster: String,
     val release: String,
     val datetime: String,
-    val vote_avg: Float
+    val vote_avg: Float,
+    val backdrop: String
 )

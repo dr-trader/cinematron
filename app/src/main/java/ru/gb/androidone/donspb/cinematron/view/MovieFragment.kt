@@ -5,11 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import coil.load
+import coil.transform.GrayscaleTransformation
 //import coil.api.load
 import ru.gb.androidone.donspb.cinematron.Consts
+import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.databinding.MovieFragmentBinding
 import ru.gb.androidone.donspb.cinematron.model.*
 import ru.gb.androidone.donspb.cinematron.viewmodel.AppState
@@ -69,6 +72,10 @@ class MovieFragment : Fragment() {
 
     private fun showMovieData(oneMovie: OneMovie) {
          with (binding) {
+             backdrop.load(Consts.BASE_IMAGE_URL + oneMovie.backdrop_path) {
+                 transformations(GrayscaleTransformation())
+                 build()
+             }
              mainView.visibility = View.VISIBLE
              loadingLayout.visibility = View.GONE
              val date = LocalDate.parse(oneMovie.release_date)
@@ -78,7 +85,7 @@ class MovieFragment : Fragment() {
              }
              movieTitle.text = "${oneMovie.title} (${date.year})"
              movieGenres.text = genresString
-             moviePoster.load("https://image.tmdb.org/t/p/original/${oneMovie.poster_path}")
+             moviePoster.load(Consts.BASE_IMAGE_URL + oneMovie.poster_path)
              movieRating.text = oneMovie.vote_average.toString()
              movieDecr.text = oneMovie.overview
         }
