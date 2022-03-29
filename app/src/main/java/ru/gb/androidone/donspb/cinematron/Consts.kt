@@ -5,4 +5,8 @@ object Consts {
     const val BUNDLE_ID_NAME = "CinematorMovieID"
     const val BASE_URL = "https://api.themoviedb.org/"
     const val FIRST_PAGE_INDEX = 1
+
+    const val RATING_RED_MAX = 20
+    const val RATING_YEL_MAX = 50
+    const val RATING_LGR_MAX = 70
 }

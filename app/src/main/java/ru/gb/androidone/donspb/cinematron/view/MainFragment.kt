@@ -29,7 +29,6 @@ class MainFragment : Fragment() {
 
     private val adapter = MovieRecycler(object : OnItemViewClickListener {
         override fun onItemViewClick(movie: MovieListItem) {
-//            viewModel.saveMovieToDB(movie)
             activity?.supportFragmentManager?.apply {
                 beginTransaction()
                     .replace(R.id.main_container, MovieFragment.newInstance(Bundle().apply {
@@ -74,26 +73,18 @@ class MainFragment : Fragment() {
         })
         binding.movieRecycler.adapter = adapter
 
-//        viewModel.movieListDataNow.observe(viewLifecycleOwner, Observer {
-//            renderData(it, MovieListsEnum.NowPlayingList.listNameId)
-//        })
-//        viewModel.movieListDataPop.observe(viewLifecycleOwner, Observer {
-//            renderData(it, MovieListsEnum.PopularList.listNameId)
-//        })
-
         viewModel.getMovieListFromRemote(MovieListsEnum.TopRatedList.pathPart)
-
     }
 
     private fun renderData(appState: AppState, listname: Int) {
         when (appState) {
             is AppState.Starting -> {
                 binding.rvLoadingLayout.visibility = View.GONE
-                binding.mainLayout.visibility = View.VISIBLE
+                binding.movieRecycler.visibility = View.VISIBLE
                 adapter.setMovie(appState.movieList.results)
             }
             is AppState.Loading -> {
-                binding.mainLayout.visibility = View.GONE
+                binding.movieRecycler.visibility = View.GONE
                 binding.rvLoadingLayout.visibility = View.VISIBLE
             }
             is AppState.Error -> {

@@ -5,12 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.model.MovieListItem
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class MovieRecycler(private var onItemViewClickListener: MainFragment.OnItemViewClickListener?) : RecyclerView.Adapter<MovieRecycler.ViewHolder>() {
 
@@ -46,12 +48,29 @@ class MovieRecycler(private var onItemViewClickListener: MainFragment.OnItemView
                 findViewById<ImageView>(R.id.rv_item_image)
                     .load("https://image.tmdb.org/t/p/original/${movie.poster_path}")
                 findViewById<TextView>(R.id.rv_item_title).text = movie.title
-                val date = LocalDate.parse(movie.release_date)
-                findViewById<TextView>(R.id.rv_item_year).text = "(${date.year})"
-
+                val formatter = DateTimeFormatter.ofPattern("dd LLL yyyy")
+                findViewById<TextView>(R.id.rv_item_year).text =
+                    LocalDate.parse(movie.release_date).format(formatter).toString()
+                val movieRating = (movie.vote_average * 10).toInt()
+                findViewById<ProgressBar>(R.id.progress_bar_rating).progress = movieRating
+                findViewById<ProgressBar>(R.id.progress_bar_rating)
+                    .indicatorColor = colorMe(movieRating)
+                findViewById<TextView>(R.id.tv_rating).text = movieRating.toString()
                 setOnClickListener { onItemViewClickListener?.onItemViewClick(movie) }
             }
         }
+
+        fun colorMe(rating: Int) =
+            when {
+                rating < Consts.RATING_RED_MAX -> requireActivity()
+                    .getResources().getColor(android.R.color.progress_bad)
+                rating < Consts.RATING_YEL_MAX -> requireActivity()
+                    .getResources().getColor(android.R.color.progress_notbad)
+                rating < Consts.RATING_LGR_MAX -> requireActivity()
+                    .getResources().getColor(android.R.color.progress_good)
+                else -> requireActivity()
+                    .getResources().getColor(android.R.color.progress_excellent)
+            }
     }
 }
 
