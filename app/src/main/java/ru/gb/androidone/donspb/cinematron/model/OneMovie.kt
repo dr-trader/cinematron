@@ -7,7 +7,8 @@ val id: Int,
 val overview: String?,
 val release_date: String,
 val vote_average: Float,
-val poster_path: String?
+val poster_path: String?,
+val backdrop_path: String?
 )
 
 data class Genre(

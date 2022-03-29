@@ -1,18 +1,12 @@
 package ru.gb.androidone.donspb.cinematron.viewmodel
 
-import android.content.res.Resources
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.gb.androidone.donspb.cinematron.App
 import ru.gb.androidone.donspb.cinematron.Consts
-import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.model.MovieList
-import ru.gb.androidone.donspb.cinematron.model.MovieListItem
-import ru.gb.androidone.donspb.cinematron.repository.LocalRepo
-import ru.gb.androidone.donspb.cinematron.repository.LocalRepoImpl
 import ru.gb.androidone.donspb.cinematron.repository.MainRepoImpl
 import ru.gb.androidone.donspb.cinematron.repository.RemoteDataSource
 
@@ -26,14 +20,16 @@ class MainViewModel(
 ) : ViewModel() {
 
     private var nextPage: Int? = null
-    private var totalPages: Int? = null
+    private var totalPages: Int = Consts.FIRST_PAGE_INDEX
     val movieListData: MutableLiveData<AppState> = MutableLiveData()
 
     fun getMovieListFromRemote(listType: String = "") {
         movieListData.value = AppState.Loading
         if (nextPage == null) nextPage = Consts.FIRST_PAGE_INDEX
         else nextPage = nextPage!! + 1
-        repositoryImpl.getMovieListFromServer(listType, CallBack(), nextPage!!)
+
+        if (nextPage!! <= totalPages!!)
+            repositoryImpl.getMovieListFromServer(listType, CallBack(), nextPage!!)
 
 
 //        when (listType.listNameId) {
@@ -62,9 +58,10 @@ class MainViewModel(
             val serverResponse: MovieList? = response.body()
             val valueToPost =
                 if (response.isSuccessful && serverResponse != null) {
+                    totalPages = serverResponse.total_pages
                     AppState.Starting(serverResponse)
                 } else {
-                    AppState.Error(Throwable(R.string.server_error.toString()))
+                    AppState.Error(Throwable(response.body().toString()))
                 }
             movieListData.postValue(valueToPost)
 //            when (listType) {
@@ -83,8 +80,7 @@ class MainViewModel(
             }
 
         override fun onFailure(call: Call<MovieList>, t: Throwable) {
-            val valueToPost = AppState.Error(
-                Throwable(t.message ?: R.string.request_error.toString()))
+            val valueToPost = AppState.Error(Throwable(t.message))
             movieListData.postValue(valueToPost)
         }
     }
