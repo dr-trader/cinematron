@@ -11,5 +11,6 @@ data class MovieListItem(
     val release_date: String,
     val vote_average: Float,
     val poster_path: String?,
-    val backdrop_path: String?
+    val backdrop_path: String?,
+    val runtime: Int
 )

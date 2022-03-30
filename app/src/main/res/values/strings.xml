@@ -10,6 +10,7 @@
 
     <string name="error">Error! Can\'t load data.</string>
     <string name="reload">Try Again</string>
+    <string name="descr_title_text">Overview:</string>
 
 
     <!-- List Names -->
@@ -18,20 +19,5 @@
     <string name="top_rated_list">Top Rated</string>
     <string name="upcoming_list">Upcoming</string>
     <string name="recent_list">Recent</string>
-
-    <!-- Location part strings -->
-    <string name="dialog_rationale_title">Geolocation Access</string>
-    <string name="dialog_rationale_message">You should grant permission to access geolocation for movie theatre search</string>
-    <string name="dialog_rationale_give_access">Allow</string>
-    <string name="dialog_rationale_decline">Decline</string>
-    <string name="dialog_title_no_gps">No geolocation</string>
-    <string name="dialog_message_no_gps">Geolocation is not allowed for this app</string>
-    <string name="dialog_button_close">Close</string>
-    <string name="dialog_title_gps_off">GPS off</string>
-    <string name="dialog_message_last_loc_unknown">No GPS data</string>
-    <string name="dialog_message_last_loc_known">Last known location showed</string>
-    <string name="dialog_address_title">Address</string>
-    <string name="dialog_open_map">Open map</string>
-    <string name="default_address">Nevsky pr., 1</string>
 
 </resources>

@@ -5,19 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import coil.transform.GrayscaleTransformation
-//import coil.api.load
 import ru.gb.androidone.donspb.cinematron.Consts
-import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.databinding.MovieFragmentBinding
 import ru.gb.androidone.donspb.cinematron.model.*
 import ru.gb.androidone.donspb.cinematron.viewmodel.AppState
 import ru.gb.androidone.donspb.cinematron.viewmodel.MovieModelView
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class MovieFragment : Fragment() {
 
@@ -30,7 +27,7 @@ class MovieFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = MovieFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -38,7 +35,7 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val movieID = arguments?.getInt(Consts.BUNDLE_ID_NAME) ?: 0
-        viewModel.movieLiveData.observe(viewLifecycleOwner, Observer { renderData(it) })
+        viewModel.movieLiveData.observe(viewLifecycleOwner) { renderData(it) }
         viewModel.getMovieFromRemoteSource(movieID)
     }
 
@@ -64,8 +61,7 @@ class MovieFragment : Fragment() {
              is AppState.Error -> {
                  binding.mainView.visibility = View.VISIBLE
                  binding.loadingLayout.visibility = View.GONE
-                 //binding.mainView.showSnackBar()
-                 // TODO: show error message + action
+                 // TODO: show error message
              }
          }
      }
@@ -78,15 +74,22 @@ class MovieFragment : Fragment() {
              }
              mainView.visibility = View.VISIBLE
              loadingLayout.visibility = View.GONE
-             val date = LocalDate.parse(oneMovie.release_date)
+             val formatter = DateTimeFormatter.ofPattern("dd LLL yyyy")
+             val releaseDate = "Released: " + LocalDate.parse(
+                 oneMovie.release_date).format(formatter).toString()
              var genresString = ""
              for (genre in oneMovie.genres) {
                  genresString += genre.name + " "
              }
-             movieTitle.text = "${oneMovie.title} (${date.year})"
+             val duration = (oneMovie.runtime / 60).toString() + "h " +
+                     (oneMovie.runtime % 60) + "m"
+
+             movieTitle.text = oneMovie.title
+             movieRelease.text = releaseDate
+             movieDuration.text = duration
              movieGenres.text = genresString
              moviePoster.load(Consts.BASE_IMAGE_URL + oneMovie.poster_path)
-             movieRating.text = oneMovie.vote_average.toString()
+             movieRating.text = "User Score: ${oneMovie.vote_average}"
              movieDecr.text = oneMovie.overview
         }
     }

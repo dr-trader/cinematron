@@ -21,7 +21,7 @@ class LocalRepoImpl(private val localData: RecentDao) : LocalRepo {
 
     fun convertFromDB(entityList: List<RecentMovies>): List<MovieListItem> {
         return entityList.map {
-            MovieListItem(it.title, it.id, it.release, it.vote_avg, it.poster, it.backdrop)
+            MovieListItem(it.title, it.id, it.release, it.vote_avg, it.poster, it.backdrop,it.runtime)
         }
     }
 
@@ -29,7 +29,8 @@ class LocalRepoImpl(private val localData: RecentDao) : LocalRepo {
         val moviePoster = movieItem.poster_path ?: ""
         val backdrop = movieItem.backdrop_path ?: ""
         return RecentMovies(movieItem.id, movieItem.title, moviePoster,
-        movieItem.release_date, LocalDateTime.now().toString(), movieItem.vote_average, backdrop)
+        movieItem.release_date, LocalDateTime.now().toString(), movieItem.vote_average,
+            backdrop, movieItem.runtime)
     }
 
 }

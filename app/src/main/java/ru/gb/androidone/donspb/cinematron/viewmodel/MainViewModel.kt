@@ -11,10 +11,6 @@ import ru.gb.androidone.donspb.cinematron.repository.MainRepoImpl
 import ru.gb.androidone.donspb.cinematron.repository.RemoteDataSource
 
 class MainViewModel(
-//    val movieListDataNow: MutableLiveData<AppState> = MutableLiveData(),
-//    val movieListDataPop: MutableLiveData<AppState> = MutableLiveData(),
-//    val movieListDataTop: MutableLiveData<AppState> = MutableLiveData(),
-//    val movieListDataUp: MutableLiveData<AppState> = MutableLiveData(),
     private val repositoryImpl: MainRepoImpl = MainRepoImpl(RemoteDataSource())
 //    private val recentRepository: LocalRepo = LocalRepoImpl(App.getRecentDao())
 ) : ViewModel() {
@@ -22,6 +18,11 @@ class MainViewModel(
     private var nextPage: Int? = null
     private var totalPages: Int = Consts.FIRST_PAGE_INDEX
     val movieListData: MutableLiveData<AppState> = MutableLiveData()
+
+    fun clear() {
+        nextPage = null
+        totalPages = Consts.FIRST_PAGE_INDEX
+    }
 
     fun getMovieListFromRemote(listType: String = "") {
         movieListData.value = AppState.Loading

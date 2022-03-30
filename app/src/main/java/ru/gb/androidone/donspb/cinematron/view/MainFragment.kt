@@ -26,18 +26,7 @@ class MainFragment : Fragment() {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
-    private val adapter = MovieRecycler(object : OnItemViewClickListener {
-        override fun onItemViewClick(movie: MovieListItem) {
-            activity?.supportFragmentManager?.apply {
-                beginTransaction()
-                    .replace(R.id.main_container, MovieFragment.newInstance(Bundle().apply {
-                        putInt(Consts.BUNDLE_ID_NAME, movie.id)
-                    }))
-                    .addToBackStack("")
-                    .commitAllowingStateLoss()
-            }
-        }
-    })
+    private lateinit var adapter: MovieRecycler
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +38,28 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = MovieRecycler(object : OnItemViewClickListener {
+            override fun onItemViewClick(movie: MovieListItem) {
+                activity?.supportFragmentManager?.apply {
+                    beginTransaction()
+                        .replace(R.id.main_container, MovieFragment.newInstance(Bundle().apply {
+                            putInt(Consts.BUNDLE_ID_NAME, movie.id)
+                        }))
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+            }
+        })
+
         val layoutManager = GridLayoutManager(
             requireContext(),
             2,
             RecyclerView.VERTICAL,
             false
         )
+
+        viewModel.clear()
 
         viewModel.movieListData.observe(viewLifecycleOwner) {
             renderData(it, MovieListsEnum.TopRatedList.listNameId)
