@@ -27,6 +27,7 @@ class MainFragment : Fragment() {
     }
 
     private lateinit var adapter: MovieRecycler
+    private var listname: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,30 +40,26 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        listname = arguments?.getString(Consts.BUNDLE_LISTNAME_TAG)
+
         adapter = MovieRecycler(object : OnItemViewClickListener {
             override fun onItemViewClick(movie: MovieListItem) {
-                activity?.supportFragmentManager?.apply {
+                parentFragmentManager.apply {
                     beginTransaction()
                         .replace(R.id.main_container, MovieFragment.newInstance(Bundle().apply {
                             putInt(Consts.BUNDLE_ID_NAME, movie.id)
                         }))
-                        .addToBackStack("")
                         .commitAllowingStateLoss()
                 }
             }
         })
 
-        val layoutManager = GridLayoutManager(
-            requireContext(),
-            2,
-            RecyclerView.VERTICAL,
-            false
-        )
+        val layoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL,
+            false)
 
         viewModel.clear()
-
         viewModel.movieListData.observe(viewLifecycleOwner) {
-            renderData(it, MovieListsEnum.TopRatedList.listNameId)
+            renderData(it)
         }
 
         binding.movieRecycler.layoutManager = layoutManager
@@ -77,10 +74,10 @@ class MainFragment : Fragment() {
         })
         binding.movieRecycler.adapter = adapter
 
-        viewModel.getMovieListFromRemote(MovieListsEnum.TopRatedList.pathPart)
+        viewModel.getMovieListFromRemote(listname ?: MovieListsEnum.TopRatedList.pathPart)
     }
 
-    private fun renderData(appState: AppState, listname: Int) {
+    private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Starting -> {
                 binding.rvLoadingLayout.visibility = View.GONE
@@ -94,16 +91,13 @@ class MainFragment : Fragment() {
             is AppState.Error -> {
                 binding.mainLayout.showSnackBar(getString(R.string.error))
             }
+            else -> { binding.mainLayout.showSnackBar("Неизвестное состояние") }
         }
     }
 
     override fun onDestroyView() {
         adapter.removeListener()
         super.onDestroyView()
-    }
-
-    companion object {
-        fun newInstance() = MainFragment()
     }
 
     interface OnItemViewClickListener {

@@ -2,7 +2,6 @@ package ru.gb.androidone.donspb.cinematron.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
 
 @Entity
 data class RecentMovies(

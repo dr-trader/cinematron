@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import coil.transform.GrayscaleTransformation
 import ru.gb.androidone.donspb.cinematron.Consts
+import ru.gb.androidone.donspb.cinematron.R
 import ru.gb.androidone.donspb.cinematron.databinding.MovieFragmentBinding
 import ru.gb.androidone.donspb.cinematron.model.*
 import ru.gb.androidone.donspb.cinematron.viewmodel.AppState
@@ -33,6 +35,16 @@ class MovieFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val callback = object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_container, TabsFragment())
+                    .commit()
+            }
+        }
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
+
         super.onViewCreated(view, savedInstanceState)
         val movieID = arguments?.getInt(Consts.BUNDLE_ID_NAME) ?: 0
         viewModel.movieLiveData.observe(viewLifecycleOwner) { renderData(it) }
@@ -63,6 +75,7 @@ class MovieFragment : Fragment() {
                  binding.loadingLayout.visibility = View.GONE
                  // TODO: show error message
              }
+             else -> { }
          }
      }
 
@@ -98,6 +111,4 @@ class MovieFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

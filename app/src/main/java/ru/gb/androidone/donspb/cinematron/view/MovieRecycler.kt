@@ -66,7 +66,7 @@ class MovieRecycler(private var onItemViewClickListener: MainFragment.OnItemView
             }
         }
 
-        fun colorMe(rating: Int) = when {
+        private fun colorMe(rating: Int) = when {
             rating < Consts.RATING_RED_MAX ->
                 ContextCompat.getColor(itemView.context, R.color.progress_bad)
             rating < Consts.RATING_YEL_MAX ->

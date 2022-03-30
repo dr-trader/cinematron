@@ -12,7 +12,6 @@ import ru.gb.androidone.donspb.cinematron.repository.RemoteDataSource
 
 class MainViewModel(
     private val repositoryImpl: MainRepoImpl = MainRepoImpl(RemoteDataSource())
-//    private val recentRepository: LocalRepo = LocalRepoImpl(App.getRecentDao())
 ) : ViewModel() {
 
     private var nextPage: Int? = null
@@ -24,36 +23,16 @@ class MainViewModel(
         totalPages = Consts.FIRST_PAGE_INDEX
     }
 
-    fun getMovieListFromRemote(listType: String = "") {
+    fun getMovieListFromRemote(listName: String) {
         movieListData.value = AppState.Loading
         if (nextPage == null) nextPage = Consts.FIRST_PAGE_INDEX
         else nextPage = nextPage!! + 1
 
-        if (nextPage!! <= totalPages!!)
-            repositoryImpl.getMovieListFromServer(listType, CallBack(), nextPage!!)
-
-
-//        when (listType.listNameId) {
-//            R.string.now_playing_list -> {
-//                movieListDataNow.value = AppState.Loading
-//                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId), pageNumber = 1)
-//            }
-//            R.string.popular_list -> {
-//                movieListDataPop.value = AppState.Loading
-//                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId), pageNumber = 1)
-//            }
-//            R.string.top_rated_list -> {
-//                movieListDataTop.value = AppState.Loading
-//                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId), pageNumber = 1)
-//            }
-//            R.string.upcoming_list -> {
-//                movieListDataUp.value = AppState.Loading
-//                repositoryImpl.getMovieListFromServer(listType.pathPart, CallBack(listType.listNameId), pageNumber = 1)
-//            }
-//        }
+        if (nextPage!! <= totalPages)
+            repositoryImpl.getMovieListFromServer(listName, CallBack(), nextPage!!)
     }
 
-    inner class CallBack() : Callback<MovieList> {
+    inner class CallBack : Callback<MovieList> {
 
         override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
             val serverResponse: MovieList? = response.body()
@@ -65,19 +44,6 @@ class MainViewModel(
                     AppState.Error(Throwable(response.body().toString()))
                 }
             movieListData.postValue(valueToPost)
-//            when (listType) {
-//                R.string.now_playing_list -> {
-//                    movieListDataNow.postValue(valueToPost)
-//                }
-//                R.string.top_rated_list -> {
-//                    movieListDataTop.postValue(valueToPost)
-//                }
-//                R.string.popular_list -> {
-//                    movieListDataPop.postValue(valueToPost)
-//                }
-//                R.string.upcoming_list -> {
-//                    movieListDataUp.postValue(valueToPost)
-//                }
             }
 
         override fun onFailure(call: Call<MovieList>, t: Throwable) {
@@ -85,23 +51,4 @@ class MainViewModel(
             movieListData.postValue(valueToPost)
         }
     }
-
-//        override fun onFailure(call: Call<MovieList>, t: Throwable) {
-
-//            when (listType) {
-//                R.string.now_playing_list -> {
-//                    movieListDataNow.postValue(valueToPost)
-//                }
-//                R.string.top_rated_list -> {
-//                    movieListDataTop.postValue(valueToPost)
-//                }
-//                R.string.popular_list -> {
-//                    movieListDataPop.postValue(valueToPost)
-//                }
-//                R.string.upcoming_list -> {
-//                    movieListDataUp.postValue(valueToPost)
-//                }
-//            }
-//        }
-//    }
 }

@@ -10,4 +10,6 @@ object Consts {
     const val RATING_RED_MAX = 20
     const val RATING_YEL_MAX = 50
     const val RATING_LGR_MAX = 70
+
+    const val BUNDLE_LISTNAME_TAG = "listname"
 }

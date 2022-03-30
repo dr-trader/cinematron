@@ -1,6 +1,5 @@
 package ru.gb.androidone.donspb.cinematron.viewmodel
 
-import androidx.annotation.StringRes
 import ru.gb.androidone.donspb.cinematron.R
 
 enum class MovieListsEnum(val pathPart: String, val listNameId: Int) {
